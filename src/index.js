@@ -9,7 +9,7 @@ import EditContact, { action as editAction } from './routes/edit';
 import { action as deleteAction } from './routes/destroy';
 import ErrorPage from './routes/error-page';
 import Root, { loader as rootLoader, action as rootAction } from './routes/root';
-import Index from './routes';
+import Index, { action as indexAction, loader as indexLoader } from './routes';
 
 const router = createBrowserRouter([
   {
@@ -26,6 +26,8 @@ const router = createBrowserRouter([
           {
             index: true,
             element: <Index />,
+            loader: indexLoader,
+            action: indexAction,
           },
           {
             path: "contacts/:contactId",
