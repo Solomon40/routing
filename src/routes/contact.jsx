@@ -9,29 +9,31 @@ export async function action({ request, params }) {
 }
 
 export async function loader({ params }) {
-    const contact = await getContact(params.contactId);
-    if(!contact){
-      throw new Response("", {
-        status: 404,
-        statusText: "Not Found",
-      });
-    }
-    return { contact };
+  const contact = await getContact(params.contactId);
+  if (!contact) {
+    throw new Response("", {
+      status: 404,
+      statusText: "Not Found",
+    });
+  }
+  return { contact };
 }
 
 
 export default function Contact() {
   const { contact } = useLoaderData();
-  
+  function handleMessageAuthor() {
+    return window.open("https://twitter.com/intent/user?screen_name=ewiwilems", '_blank', 'noreferrer');
+  }
 
-//   const contact = {
-//     first: "Your",
-//     last: "Name",
-//     avatar: "https://placekitten.com/g/200/200",
-//     twitter: "your_handle",
-//     notes: "Some notes",
-//     favorite: true,
-//   };
+  //   const contact = {
+  //     first: "Your",
+  //     last: "Name",
+  //     avatar: "https://placekitten.com/g/200/200",
+  //     twitter: "your_handle",
+  //     notes: "Some notes",
+  //     favorite: true,
+  //   };
 
   return (
     <div id="contact">
@@ -70,9 +72,19 @@ export default function Contact() {
         {contact.notes && <p>{contact.notes}</p>}
 
         <div>
-          <Form action="edit">
-            <button type="submit">Edit</button>
-          </Form>
+          {contact.first === "Tochukwu" && contact.last === "Ewiwilem" ? (
+            <button type="button" onClick={handleMessageAuthor}>Message</button>
+          ) : (
+            <Form action="edit">
+
+              <button type="submit">Edit</button>
+
+            </Form>
+          )}
+
+
+
+
           <Form
             method="post"
             action="destroy"
@@ -94,14 +106,16 @@ export default function Contact() {
   );
 }
 
+
+
 function Favorite({ contact }) {
   const fetcher = useFetcher();
 
   // yes, this is a `let` for later
   let favorite = contact.favorite;
-  
+
   // optimistic UI
-  if(fetcher.formData) {
+  if (fetcher.formData) {
     favorite = fetcher.formData.get("favorite") === "true";
   }
   return (
